@@ -26,8 +26,6 @@
       $valor2 = $_POST["valor2"];
       $area = $valor1 * $valor2;
       echo "<p>O valor da área do retângulo é: $area</p>";
-//- subtração  * multiplicação **elevado / divisao //divisão % resto da divisão</p>";
-
       
   }
 

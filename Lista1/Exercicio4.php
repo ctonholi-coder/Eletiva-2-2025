@@ -29,9 +29,7 @@
       if ($valor2 == 0) {
           echo "<p>Erro: Divisão por zero não é permitida.</p>";
       }
-//- subtração  * multiplicação **elevado / divisao //divisão % resto da divisão</p>";
-
-      
+     
   }
 
 ?>

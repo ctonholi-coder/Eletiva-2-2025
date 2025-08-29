@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Exercício 8 - Cálculo de Área do Retângulo</title>
+<title>Exercício 19 - Tranformar dias em horas, minutos e segundos</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
 </head>
 <body> 
 <div class="container py-3">
-<h1></h1>
+<h1>Exercício 19 - Tranformar dias em horas, minutos e segundos</h1>
 <form method="post">
 <div class="mb-3">
               <label for="Dias" class="form-label">Informe a quantidade de dias</label>
@@ -23,7 +23,7 @@
       $Horas = $Dias * 24;
       $Minutos = $Horas * 60;
       $Segundos = $Minutos * 60;
-        echo "<p>A quantidade de horas é: $Horas, minutos $Minutos, segundos $Segundos</p>";
+        echo "<p>Os valores são: $Horas horas, $Minutos minutos, $Segundos segundos</p>";
         echo "<ul>
             <li>Horas: $Horas</li>
             <li>Minutos: $Minutos</li>

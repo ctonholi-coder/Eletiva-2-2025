@@ -26,8 +26,6 @@
       $valor2 = $_POST["valor2"];
       $multiplicacao = $valor1 * $valor2;
       echo "<p>Soma: $multiplicacao</p>";
-//- subtração  * multiplicação **elevado / divisao //divisão % resto da divisão</p>";
-
       
   }
 
