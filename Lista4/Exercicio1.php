@@ -75,27 +75,30 @@
         echo '<div class="card-header"><h4>Contatos Salvos e Ordenados</h4></div>';
 
         if (!empty($erros)) {
-            echo '<div class="alert alert-warning mb-0">';
-            echo '<strong>Avisos:</strong><br>';
+            echo '<div class="alert alert-danger mb-0">';
+            echo '<strong>Erro:</strong><br>';
             foreach ($erros as $erro) {
                 echo $erro . '<br>';
             }
             echo '</div>';
         }
 
-
         if (!empty($mapaContatos)) {
-            echo '<ul class="list-group list-group-flush">';
-            foreach ($mapaContatos as $nome => $telefone) {
-                echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                echo "<strong>$nome</strong>";
-                echo "<span class='badge bg-secondary rounded-pill'>$telefone</span>";
-                echo '</li>';
-            }
-            echo '</ul>';
-        } else {
-            echo '<div class="card-body"><p class="text-center">Nenhum contato válido foi adicionado.</p></div>';
-        }
+              echo '<ul class="list-group list-group-flush">';
+              echo '<li  class="list-group-item d-flex justify-content-between align-items-center">';
+              echo '  <strong>Nome </strong>';
+              echo '  <strong>Telefone </strong>';
+              echo '</li>';
+              foreach ($mapaContatos as $nome => $telefone) {
+                  echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
+                  echo "<p> $nome </p>";
+                  echo "<p> $telefone </p>";
+                  echo '</li>';
+              }
+              echo '</ul>';
+          } else {
+              echo '<div class="card-body"><p class="text-center">Nenhum aluno válido foi adicionado.</p></div>';
+          }
 
         echo '</div>';
     }
