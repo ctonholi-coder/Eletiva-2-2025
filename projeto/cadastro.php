@@ -50,4 +50,8 @@
 
     ?>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> fe1cbc3ee02c496da2d013c1c88c0edca984471a
