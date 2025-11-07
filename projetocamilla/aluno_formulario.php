@@ -1,34 +1,70 @@
-<!doctype html>
-<html lang="pt-BR">
+<?php
+include 'conexao.php'; // Inclui o $pdo
+
+// Inicializa as variáveis
+$id = '';
+$nome = '';
+$email = '';
+$matricula = '';
+$telefone = '';
+$titulo_pagina = "Cadastrar Novo Aluno";
+$action = "aluno_salvar.php";
+
+// Verifica se o ID foi passado na URL (modo de edição)
+if (isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $titulo_pagina = "Editar Aluno";
+
+    // Busca os dados do aluno no banco
+    $stmt = $pdo->prepare("SELECT * FROM aluno WHERE id = ?");
+    $stmt->execute([$id]); // Passa o ID como um array para o execute
+    
+    if ($stmt->rowCount() > 0) {
+        $aluno = $stmt->fetch(PDO::FETCH_ASSOC); // Pega o primeiro resultado
+        $nome = $aluno['nome'];
+        $email = $aluno['email'];
+        $matricula = $aluno['matricula'];
+        $telefone = $aluno['telefone'];
+    }
+}
+$pdo = null; // Fecha a conexão
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cadastro de Alunos (as)</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <meta charset="UTF-8">
+    <title><?php echo $titulo_pagina; ?></title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 500px; }
+        label, input { display: block; margin-bottom: 10px; width: 100%; }
+        input[type="submit"] { width: auto; padding: 10px 20px; cursor: pointer; }
+    </style>
 </head>
-<body> 
-<div class="container py-3">
-<h1>Cadastro de Alunos (as)</h1>
-<form method="post">
-<div class="mb-3">
-              <label for="id" class="form-label">ID</label>
-              <input type="number" id="id" name="id" class="form-control" required="">
-            </div><div class="mb-3">
-              <label for="nome" class="form-label">Nome</label>
-              <input type="text" id="nome" name="nome" class="form-control" required="">
-            </div><div class="mb-3">
-              <label for="email" class="form-label">E-mail</label>
-              <input type="email" id="email" name="email" class="form-control" required="">
-            </div><div class="mb-3">
-              <label for="aluno_ra" class="form-label">R.A.</label>
-              <input type="number" id="aluno_ra" name="aluno_ra" class="form-control" required="">
-            </div><div class="mb-3">
-              <label for="telefone" class="form-label">Telefone</label>
-              <input type="number" id="telefone" name="telefone" class="form-control">
-            </div>
-<button type="submit" class="btn btn-primary">Enviar</button>
-</form>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-</div>
+<body>
+
+    <h2><?php echo $titulo_pagina; ?></h2>
+
+    <form action="<?php echo $action; ?>" method="POST">
+        <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+        
+        <label for="matricula">Matrícula:</label>
+        <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($matricula); ?>" required>
+        
+        <label for="telefone">Telefone (opcional):</label>
+        <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone); ?>">
+
+        <input type="submit" value="<?php echo ($id) ? 'Atualizar' : 'Cadastrar'; ?>">
+    </form>
+    <br>
+    <a href="alunos_listar.php">Voltar para a Lista</a>
+
 </body>
 </html>
