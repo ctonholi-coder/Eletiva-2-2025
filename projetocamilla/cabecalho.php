@@ -16,6 +16,7 @@
 </head>
 
 <body>
+  <body class="d-flex flex-column min-vh-100">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a class="navbar-brand" href="principal.php">Biblioteca</a>
@@ -44,10 +45,17 @@
               <li><a class="dropdown-item" href="livros_listar.php">Livros</a></li>
             </ul>
           </li>
+
         </ul>
+
+        <div class="d-flex">
+          <a href="logout.php" class="btn btn-outline-light">Sair</a>
+        </div>
 
         </div>
     </div>
   </nav>
   
-  <div class="container py-3">
+  <div class="container py-3 flex-grow-1">
+
+  

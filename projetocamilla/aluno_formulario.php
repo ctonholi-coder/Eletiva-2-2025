@@ -1,4 +1,6 @@
 <?php
+require("cabecalho.php");
+
 include 'conexao.php'; // Inclui o $pdo
 
 // Inicializa as variáveis
@@ -30,41 +32,43 @@ if (isset($_GET['id'])) {
 $pdo = null; // Fecha a conexão
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title><?php echo $titulo_pagina; ?></title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        form { max-width: 500px; }
-        label, input { display: block; margin-bottom: 10px; width: 100%; }
-        input[type="submit"] { width: auto; padding: 10px 20px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
+<div class="container mt-4">
     <h2><?php echo $titulo_pagina; ?></h2>
 
-    <form action="<?php echo $action; ?>" method="POST">
+    <form action="<?php echo $action; ?>" method="POST" class="mt-3" style="max-width: 500px;">
+       
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required>
+        <div class="mb-3">
+            <label for="nome"  class="form-label" >Nome:</label>
+            <input type="text" id="nome" name="nome" class="form-control" value="<?php echo htmlspecialchars($nome); ?>" required>
+        </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" required>
+        </div>
         
-        <label for="matricula">Matrícula:</label>
-        <input type="text" id="matricula" name="matricula" value="<?php echo htmlspecialchars($matricula); ?>" required>
+        <div class="mb-3">
+            <label for="matricula" class="form-label">Matrícula:</label>
+            <input type="text" id="matricula" name="matricula" class="form-control" value="<?php echo htmlspecialchars($matricula); ?>" required>
+        </div>
         
-        <label for="telefone">Telefone (opcional):</label>
-        <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone); ?>">
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone (opcional):</label>
+            <input type="text" id="telefone" name="telefone" class="form-control" value="<?php echo htmlspecialchars($telefone); ?>">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            <?php echo ($id) ? 'Atualizar' : 'Cadastrar'; ?>
+        </button>
 
-        <input type="submit" value="<?php echo ($id) ? 'Atualizar' : 'Cadastrar'; ?>">
+        <a href="alunos_listar.php" class="btn btn-secondary">Voltar para a Lista</a>
     </form>
     <br>
-    <a href="alunos_listar.php">Voltar para a Lista</a>
 
-</body>
-</html>
+</div>
+
+<?php
+require("rodape.php");
+?>

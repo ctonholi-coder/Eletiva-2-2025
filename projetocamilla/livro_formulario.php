@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     $titulo_pagina = "Editar Livro";
 
-    
+
     $stmt_livro = $pdo->prepare("SELECT * FROM livro WHERE id = ?");
     $stmt_livro->execute([$id]);
     
@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
         $quantidade_disponivel = $livro['quantidade_disponivel'];
     }
 
-    
+
     $stmt_autores_livro = $pdo->prepare("SELECT autor_id FROM livro_autor WHERE livro_id = ?");
     $stmt_autores_livro->execute([$id]);
     $autores_selecionados_ids = $stmt_autores_livro->fetchAll(PDO::FETCH_COLUMN);
@@ -97,6 +97,5 @@ $pdo = null;
 </form>
 
 <?php
-
 require("rodape.php");
 ?>

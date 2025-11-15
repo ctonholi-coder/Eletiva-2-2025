@@ -79,19 +79,106 @@ $termo_busca = $_GET['busca'] ?? '';
         if ($stmt->rowCount() > 0) {
             while($emprestimo = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // Formata as datas
-                $data_emprestimo = date('d/m/Y H:i', strtotime($emprestimo['data_emprestimo']));
-                $data_prevista = date('d/m/Y', strtotime($emprestimo['data_devolucao_prevista']));
+                if ($stmt->rowCount() > 0) {
+                    $data_emprestimo = date('d/m/Y H:i', strtotime($emprestimo['data_emprestimo']));
+                    $data_prevista = date('d/m/Y', strtotime($emprestimo['data_devolucao_prevista']));
 
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($emprestimo['id']) . "</td>";
-                echo "<td>" . htmlspecialchars($emprestimo['livro_titulo']) . "</td>";
-                echo "<td>" . htmlspecialchars($emprestimo['aluno_nome']) . "</td>";
-                echo "<td>" . $data_emprestimo . "</td>";
-                echo "<td>" . $data_prevista . "</td>";
-                echo "<td>";
-                echo "<a href='emprestimo_devolver.php?id=" . $emprestimo['id'] . "' class='btn btn-success btn-sm' onclick='return confirm(\"Confirmar a devolução deste livro?\")'>Devolver</a>";
-                echo "</td>";
-                echo "</tr>";
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($emprestimo['id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($emprestimo['livro_titulo']) . "</td>";
+                    echo "<td>" . htmlspecialchars($emprestimo['aluno_nome']) . "</td>";
+                    echo "<td>" . $data_emprestimo . "</td>";
+                    echo "<td>" . $data_prevista . "</td>";
+                    echo "<td>";
+                    echo "<a href='emprestimo_devolver.php?id=" . $emprestimo['id'] . "' class='btn btn-success btn-sm' onclick='return confirm(\"Confirmar a devolução deste livro?\")'>Devolver</a>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+            }
+        } else {
+            // Mensagem dinâmica se não houver resultados
+            if (!empty($termo_busca)) {
+                echo "<tr><td colspan='6'>Nenhum empréstimo ativo encontrado para a busca: \"" . htmlspecialchars($termo_busca) . "\"</td></tr>";
+            } else {
+                echo "<tr><td colspan='6'>Nenhum empréstimo ativo no momento.</td></tr>";
+            }
+        }
+        
+        ?>
+    </tbody>
+
+    
+</table>
+
+<br>
+<br>
+
+<h3>Empréstimos Devolvidos</h3>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Livro</th>
+            <th>Aluno</th>
+            <th>Data Empréstimo</th>
+            <th>Previsão Devolução</th>
+            <th>Data Devolução</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // 4. MODIFICAÇÃO NO SQL
+        // SQL base
+        $sql2 = "SELECT 
+                    e.id, 
+                    l.titulo AS livro_titulo, 
+                    a.nome AS aluno_nome,
+                    e.data_emprestimo,
+                    e.data_devolucao_prevista,
+                    e.data_devolucao_real
+                FROM emprestimo AS e
+                JOIN livro AS l ON e.livro_id = l.id
+                JOIN aluno AS a ON e.aluno_id = a.id
+                WHERE e.data_devolucao_real IS NOT NULL";
+
+        // Array de parâmetros para o PDO
+        $params = [];
+
+        // Se o termo de busca NÃO ESTIVER VAZIO, adiciona o filtro
+        if (!empty($termo_busca)) {
+            // Adiciona a condição no SQL
+            $sql2 .= " AND (l.titulo LIKE ? OR a.nome LIKE ?)";
+            // Adiciona os valores no array de parâmetros
+            // O '%' é um coringa do SQL (significa "qualquer coisa")
+            $params[] = '%' . $termo_busca . '%';
+            $params[] = '%' . $termo_busca . '%';
+        }
+
+        // Adiciona a ordenação
+        $sql2 .= " ORDER BY e.data_devolucao_prevista ASC";
+        
+        // 5. Executa o SQL
+        $stmt = $pdo->prepare($sql2);
+        $stmt->execute($params); // Passa os parâmetros (vazio ou com a busca)
+
+        if ($stmt->rowCount() > 0) {
+            while($emprestimo = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Formata as datas
+                if ($stmt->rowCount() > 0) {
+                    $data_devolucao = date('d/m/Y H:i', strtotime($emprestimo['data_devolucao_real']));
+                    $data_emprestimo = date('d/m/Y H:i', strtotime($emprestimo['data_emprestimo']));
+                    $data_prevista = date('d/m/Y', strtotime($emprestimo['data_devolucao_prevista']));
+
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($emprestimo['id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($emprestimo['livro_titulo']) . "</td>";
+                    echo "<td>" . htmlspecialchars($emprestimo['aluno_nome']) . "</td>";
+                    echo "<td>" . $data_emprestimo . "</td>";
+                    echo "<td>" . $data_prevista . "</td>";
+                    echo "<td>" . $data_devolucao . "</td>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
             }
         } else {
             // Mensagem dinâmica se não houver resultados
@@ -105,9 +192,10 @@ $termo_busca = $_GET['busca'] ?? '';
         $pdo = null;
         ?>
     </tbody>
+
+    
 </table>
 
 <?php
-// 6. Inclui o rodapé
 require("rodape.php");
 ?>

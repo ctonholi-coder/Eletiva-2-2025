@@ -1,67 +1,55 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Autores</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        a { text-decoration: none; color: #007bff; }
-        a.btn { padding: 5px 10px; border: 1px solid #007bff; border-radius: 4px; }
-        a.btn-delete { color: #dc3545; border-color: #dc3545; }
-        .action-links a { margin-right: 10px; }
-        .top-link { margin-bottom: 20px; display: inline-block; }
-    </style>
-</head>
-<body>
+<?php
+// Inclui o cabeçalho (já contém <html>, <head>, <body>, CSS, JS e o menu)
+require("cabecalho.php");
+?>
 
-    <h2>Gerenciamento de Autores</h2>
+<h2>Gerenciamento de Autores</h2>
 
-    <a href="autor_formulario.php" class="btn top-link">Cadastrar Novo Autor</a>
+<a href="autor_formulario.php" class="btn btn-primary mb-3">Cadastrar Novo Autor</a>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            // 1. Incluir a conexão (provê a variável $pdo)
-            include 'conexao.php';
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th style="width: 200px;">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        include 'conexao.php';
 
-            // 2. Criar e executar o comando SQL
-            $sql = "SELECT id, nome FROM autor ORDER BY nome";
-            $stmt = $pdo->query($sql);
+        $sql = "SELECT id, nome FROM autor ORDER BY nome";
+        $stmt = $pdo->query($sql);
 
-            // 3. Exibir os resultados
-            if ($stmt->rowCount() > 0) {
-                $autores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($stmt->rowCount() > 0) {
 
-                foreach ($autores as $autor) {
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($autor['id']) . "</td>";
-                    echo "<td>" . htmlspecialchars($autor['nome']) . "</td>";
-                    echo "<td class='action-links'>";
-                    // Link para editar
-                    echo "<a href='autor_formulario.php?id=" . $autor['id'] . "'>Editar</a>";
-                    // Link para excluir
-                    echo "<a href='autor_excluir.php?id=" . $autor['id'] . "' onclick='return confirm(\"Tem certeza que deseja excluir este autor?\")' class='btn-delete'>Excluir</a>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>Nenhum autor cadastrado.</td></tr>";
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $autor) {
+
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($autor['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($autor['nome']) . "</td>";
+                echo "<td>";
+                echo "<a href='autor_formulario.php?id={$autor['id']}' class='btn btn-secondary btn-sm'>Editar</a> ";
+                echo "<a href='autor_excluir.php?id={$autor['id']}' 
+                        onclick='return confirm(\"Tem certeza que deseja excluir este autor?\")'
+                        class='btn btn-danger btn-sm'>
+                        Excluir
+                      </a>";
+                echo "</td>";
+                echo "</tr>";
+
             }
-            
-            $pdo = null; // Fechar conexão
-            ?>
-        </tbody>
-    </table>
+        } else {
+            echo "<tr><td colspan='3'>Nenhum autor cadastrado.</td></tr>";
+        }
 
-</body>
-</html>
+        $pdo = null;
+        ?>
+    </tbody>
+</table>
+
+<?php
+// Inclui o rodapé (fecha </body> e </html>)
+require("rodape.php");
+?>
